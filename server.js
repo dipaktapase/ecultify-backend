@@ -12,7 +12,25 @@ const PORT = 5000;
 const api_key = process.env.API_KEY;
 const url = "https://api.segmind.com/v1/live-portrait";
 
-app.use(cors());
+const allowedOrigins = [
+  "https://ecultify-frontend.vercel.app/",
+  "https://ecultify-frontend-git-master-dipaktapases-projects.vercel.app",
+  "http://localhost:3000", // For local development
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST"],
+};
+
+// app.use(cors());
+app.use(cors(corsOptions));
 
 const upload = multer({ dest: "uploads/" });
 
